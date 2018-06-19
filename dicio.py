@@ -15,18 +15,22 @@ class Tweet():
 def readCSVdicio(filename):
     ttVector = []
     with open(filename, 'r') as csvfile:
-        # Para cada linha do csv ele descobre o peso do tweet e armazena no vetor
+        # Para cada linha do csv ele descobre o peso do tweet e armazena em um vetor
         for line in csvfile:
-            idv = len(line)-2   # corrige o indice
             # se for peso 0
-            if(line[idv] is '0'):
-                ttVector.append(Tweet(line[:idv],0))
+            if(line[-2] is '0'):
+                # simplifica texto do tweet
+                line = reduceTT(line[:-2]) 
+                # armazena no vetor
+                ttVector.append(Tweet(line,0))
             # se for peso -1
-            elif(line[idv-1] is '-' and line[idv] is '1'):
-                ttVector.append(Tweet(line[:idv-1],-1))
+            elif(line[-3] is '-' and line[-2] is '1'):
+                line = reduceTT(line[:-3])
+                ttVector.append(Tweet(line,-1))
             # se for peso 1
-            elif(line[idv] is '1'):
-                ttVector.append(Tweet(line[:idv],1))
+            elif(line[-2] is '1'):
+                line = reduceTT(line[:-2])
+                ttVector.append(Tweet(line,1))
 
     return ttVector
 
@@ -51,6 +55,27 @@ def reduceTT(tweet):
     reduced = ""
     for word in words:
         if len(word) > 2:
-            reduced += word + " "
+            # Adicionamos ao tweet reduzido, além das palavras com tamanho > 2,
+            # o radical da propria palavra removendo letras desnecessarias
+            reduced += reduce2radical(word) + " "
+    # elimina o ultimo espaço
+    reduced = reduced[:-1]
 
     return reduced
+    
+# Funcao que dado uma palavra a reduz para o seu radical, caso já esteja reduzida
+# nao a modifica
+def reduce2radical(word):
+    # Comecei e não terminei
+    # lastChar = ''
+    # reduced = ""
+    # for char in list(word):
+    #     if char != lastChar:
+    #         reduced += char
+    #     lastChar = char
+    # return reduced
+    return word
+    
+    
+    
+    

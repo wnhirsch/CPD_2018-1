@@ -4,6 +4,7 @@ from dicio import *
 filename = input("Digite o nome do arquivo: ")
 v = readCSVdicio(filename)
 
+print(len(v))
 for i in range(len(v)):
-    v[i].text = reduceTT(v[i].text)
     print(v[i])
+    
