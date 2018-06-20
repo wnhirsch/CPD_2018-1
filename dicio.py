@@ -1,15 +1,16 @@
 from unicodedata import normalize # Funcao que retorna o caractere normalizado
+from rTrie import *
 
 ################################################################################
 # Classe Tweet que armazena o valor do sentimento do Tweet e o Tweet
 class Tweet():
+    # Construtor
     def __init__(self, text = "", value = 0):
         self.text = text
         self.value = value
-
+    # Facilita a impressão
     def __str__(self):
-        s = self.text + " >>> " + str(self.value) + "\n"
-        return s
+        return self.text + " >>> " + str(self.value)
 ################################################################################
 
 # Funcao que dado o nome de um arquivo.csv retorna um vetor de classes Tweet com
@@ -54,9 +55,6 @@ def reduceTT(tweet):
         else:
             reduced += ' '
 
-    # elimina os acentos
-    reduced = normalize('NFKD', reduced).encode('ASCII', 'ignore').decode('ASCII')
-
     # elimina todas as palavras com tamanho > 2
     words = reduced.split()
     reduced = ""
@@ -74,6 +72,9 @@ def reduceTT(tweet):
 # Funcao que dado uma palavra a reduz para o seu radical, caso já esteja reduzida
 # nao a modifica
 def reduce2radical(word):
+    # elimina os acentos
+    word = normalize('NFKD', word).encode('ASCII', 'ignore').decode('ASCII')
+
     # elimina letras repetidas mais de 2 vezes na palavra
     lastChar = ''
     reduced = ""
@@ -86,5 +87,11 @@ def reduce2radical(word):
         if not (char == lastChar and count == 2):
             reduced += char
         lastChar = char
+
+    # elimina palavras que contenham qualquer caractere que nao esteja no [a-z]
+    for char in list(reduced):
+        if ord(char) not in range(ord('a'),ord('z')+1):
+            reduced = ""
+            break
 
     return reduced
