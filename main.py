@@ -2,19 +2,19 @@ from dicio import *
 
 ########################## MAIN DE TESTE
 
-# Le o nome do arquivo
+# Le o nome do arquivo do dicionario
 filename = input("Digite o nome do arquivo de entrada do dicionario: ")
+# Cria uma Trie para armazenar o dicionario
+dicio = Trie()
+# Armazena os Tweets lidos e simplificados na arvore
+dicio = csv2trie(filename, dicio)
 
-# Armazena os Tweets lidos e simplificados num vetor
-tweetsVector = readCSVdicio(filename)
-
-# Cria uma Trie para armazena-los criando assim um dicionario
-root = Trie()
-for tweet in tweetsVector:
-    for word in tweet.text.split():
-        insertTrie(root, Word(word,tweet.value))
+# Le o nome do arquivo com tweets
+filename = input("Digite o nome do arquivo a ser polarizado: ")
+# Polariza os tweets desse arquivo
+polarizeTweet(filename, dicio)
 
 # Imprime o dicionario
-dicioVector = dataInTrie(root)
+dicioVector = dataInTrie(dicio)
 for word in dicioVector:
     print(word)
