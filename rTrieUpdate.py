@@ -111,41 +111,31 @@ def dataInTrie(root):
 def writeCSVfile(buffer, csvWrite):  # escreve em arquivo CSV
     csvWrite.writerow(buffer)
 
-def buscaTudoTrie(nodeAtual, achaPalavra, indexNodo, csvWrite):
-    if(nodeAtual is not None):
-        nFilhos = len(nodeAtual.children)     # número de filhos
-        flagIndex = 0                       # flag para nodos com 2 ou + filhos
-        #print(nodeAtual.char, nFilhos)
-        if(nodeAtual.char is not None):
-            if(achaPalavra is None):        # inicializa vetor da palavra (no caso de estar na raiz da árvore)
-                achaPalavra = []
-            achaPalavra.append(nodeAtual.char)      # insere no vetor
-            #print(achaPalavra)
-            if(nFilhos >= 2):                                       # se tiver 2 ou + filhos,
-                indexNodo = achaPalavra.index(achaPalavra[-1])      # pega o index do caracter no nodo para poder retroceder e percorrer a(s) outra(s) palavra(s)
-                flagIndex = 1                                       # e seta o flag
-        if(nodeAtual.value is not None):                            # se o nodo tiver um valor, ou seja, é fim de palavra,
-            palavra = [''.join(achaPalavra)]
-            writeCSVfile(palavra, csvWrite)                             # escreve a palavra no arquivo CSV
-            if(nodeAtual.children == {}):                           # se não tiver mais nenhuma palavra adiante (nodo não tiver filhos)
-                del achaPalavra[indexNodo+1:]                       # deleta palavra até o index do caracter do nodo com 2 ou + filhos
-
-        for filho in nodeAtual.children.values():                     # percorre todos os filhos do nodo
-            buscaTudoTrie(filho, achaPalavra, indexNodo, csvWrite)
-            nFilhos -= 1                                            # ao percorrer um filho, decrementa número de filhos
-            if(nFilhos == 0 and flagIndex == 1 and achaPalavra != None and achaPalavra != []):      # após percorrer todos os filhos,
-                del achaPalavra[-1]
-
 def getByPrefix(nodeAtual, prefix, n, csvWrite):
     #print(prefix)
     if(n == len(prefix)):                                   # se chegou ao fim do prefixo
         #print(n, prefix[-1])
         if(nodeAtual.children != {}):                         # e o último caracter tem filhos na árvore,
-            for filho in nodeAtual.children.values():         # percorre árvore para cada filho e escreve-os no arquivo CSV
-                buscaTudoTrie(filho, list(prefix), prefix.index(prefix[-1]), csvWrite)
-        return
+            #for filho in nodeAtual.children.values():         # percorre árvore para cada filho e escreve-os no arquivo CSV
+                #buscaTudoTrie(filho, list(prefix), prefix.index(prefix[-1]), csvWrite)
+            wordVector = []
+            wordVector = dataPrefix(nodeAtual, csvWrite)
+        return wordVector
     chAtual = prefix[n]
     if(chAtual not in nodeAtual.children):                    # se caracter do prefixo não está na árvore, retorna 0
-        return
+        return []
     else:                                                   # se está, chama função recursiva para percorrer seu nodo
         getByPrefix(nodeAtual.children[chAtual], prefix, n+1, csvWrite)
+
+def dataPrefix(root, csvWrite):
+    vector = []
+    # se achou algum palavra reconhecida pelo dicionario armazena no vetor
+    if root.value != None:
+        vector.append(root.value.string)
+        print(root.value.string)
+        writeCSVfile([root.value.string], csvWrite)
+    # procura outras palavras recursivamente
+    for char in sorted(root.children):
+        vector += dataPrefix(root.children[char], csvWrite)
+    # retorna um vetor com todas as palavras encontradas
+    return vector
