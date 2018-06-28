@@ -142,6 +142,8 @@ def reduce2radical(word):
 def FuncionalidadeB(prefix, root):
     with open('VarPrefixo.csv', "w", newline='') as csvfile:
         csvWrite = csv.writer(csvfile, delimiter=',')
-        getByPrefix(root, prefix, 0, csvWrite)
+        vetorPalavras = []
+        vetorPalavras = getByPrefix(root, prefix, 0, csvWrite)
         print(prefix)
         csvfile.close()
+    return vetorPalavras
