@@ -1,4 +1,4 @@
-from dicio import *
+from dicioUpdate import *
 
 ########################## MAIN DE TESTE
 
@@ -13,6 +13,10 @@ dicio = csv2trie(filename, dicio)
 filename = input("Digite o nome do arquivo a ser polarizado: ")
 # Polariza os tweets desse arquivo
 polarizeTweet(filename, dicio)
+
+# Funcionalidade B
+prefix = input("Digite o prefixo que serão analisadas as variações: ")
+FuncionalidadeB(prefix, dicio)
 
 # Imprime o dicionario
 dicioVector = dataInTrie(dicio)

@@ -1,6 +1,6 @@
 from unicodedata import normalize # Funcao que retorna o caractere normalizado
-from rTrie import *
-
+from rTrieUpdate import *
+import csv
 ################################################################################
 # Classe Tweet que armazena o valor do sentimento do Tweet e o Tweet
 class Tweet():
@@ -138,3 +138,10 @@ def reduce2radical(word):
             break
 
     return reduced
+
+def FuncionalidadeB(prefix, root):
+    with open('VarPrefixo.csv', "w", newline='') as csvfile:
+        csvWrite = csv.writer(csvfile, delimiter=',')
+        getByPrefix(root, prefix, 0, csvWrite)
+        print(prefix)
+        csvfile.close()
