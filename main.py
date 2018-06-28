@@ -14,11 +14,12 @@ filename = input("Digite o nome do arquivo a ser polarizado: ")
 # Polariza os tweets desse arquivo
 polarizeTweet(filename, dicio)
 
-# Funcionalidade B
-prefix = input("Digite o prefixo que serão analisadas as variações: ")
-FuncionalidadeB(prefix, dicio)
-
 # Imprime o dicionario
 dicioVector = dataInTrie(dicio)
 for word in dicioVector:
     print(word)
+
+# Funcionalidade B
+prefix = input("Digite o prefixo para analisar suas variações: ")
+vetorPalavras = []
+vetorPalavras = FuncionalidadeB(prefix, dicio)
